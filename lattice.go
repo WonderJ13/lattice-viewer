@@ -1,9 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"image/color"
-
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/data/binding"
@@ -22,7 +19,6 @@ func CreateLattice(jHaty, jHatx, iHaty, iHatx binding.Float) *Lattice {
 }
 
 func (l Lattice) CreateRenderer() fyne.WidgetRenderer {
-	fmt.Println("Renderer created")
 	renderer := &latticeRenderer{&l, nil}
 	renderer.createImage()
 	return renderer
@@ -34,8 +30,6 @@ type latticeRenderer struct {
 }
 
 func (l *latticeRenderer) createImage() {
-	fmt.Println("Refresh")
-
 	img := CreateImage()
 
 	//Calculate inverse 2x2 matrix
@@ -62,14 +56,6 @@ func (l *latticeRenderer) createImage() {
 	bottomRighty := int(iHatyInverse*maxLattice + jHatyInverse*minLattice)
 	bottomRightx := int(iHatxInverse*maxLattice + jHatxInverse*minLattice)
 
-	fmt.Println("------------------------")
-	fmt.Println("------------------------")
-	fmt.Println(topLefty, topLeftx)
-	fmt.Println(topRighty, topRightx)
-	fmt.Println(bottomLefty, bottomLeftx)
-	fmt.Println(bottomRighty, bottomRightx)
-	fmt.Println("------------------------")
-
 	min := func(i, j int) int {
 		if i < j {
 			return i
@@ -88,11 +74,6 @@ func (l *latticeRenderer) createImage() {
 	maxY := max(topLefty, max(topRighty, max(bottomLefty, bottomRighty)))
 	maxX := max(topLeftx, max(topRightx, max(bottomLeftx, bottomRightx)))
 
-	fmt.Println(minY, minX)
-	fmt.Println(maxY, maxX)
-	fmt.Println("------------------------")
-	fmt.Println("------------------------")
-
 	for j := minY; j <= maxY; j++ {
 		for i := minX; i <= maxX; i++ {
 			translateY := iHaty*float64(i) + jHaty*float64(j)
@@ -101,8 +82,8 @@ func (l *latticeRenderer) createImage() {
 		}
 	}
 
-	img.Arrow(jHaty, jHatx, color.RGBA{255, 0, 0, 255})
-	img.Arrow(iHaty, iHatx, color.RGBA{0, 0, 255, 255})
+	img.Arrow(jHaty, jHatx, RED)
+	img.Arrow(iHaty, iHatx, BLUE)
 
 	l.image = canvas.NewImageFromImage(img.img)
 	l.image.Resize(fyne.NewSize(IMAGE_SIZE, IMAGE_SIZE))
@@ -110,7 +91,6 @@ func (l *latticeRenderer) createImage() {
 }
 
 func (l *latticeRenderer) Layout(size fyne.Size) {
-	fmt.Println("Layout")
 }
 
 func (l *latticeRenderer) MinSize() fyne.Size {
@@ -126,5 +106,4 @@ func (l *latticeRenderer) Objects() []fyne.CanvasObject {
 }
 
 func (l *latticeRenderer) Destroy() {
-	fmt.Println("Destroy")
 }

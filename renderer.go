@@ -14,13 +14,8 @@ const (
 )
 
 var RED = color.RGBA{255, 0, 0, 255}
-
-func Sign(y int) int {
-	if y < 0 {
-		return -1
-	}
-	return 1
-}
+var BLUE = color.RGBA{0, 0, 255, 255}
+var GRAY = color.RGBA{200, 200, 200, 255}
 
 type Image struct {
 	img                *image.RGBA
@@ -30,8 +25,6 @@ type Image struct {
 }
 
 func CreateImage() *Image {
-	var gray = color.RGBA{200, 200, 200, 255}
-
 	img := image.NewRGBA(
 		image.Rectangle{
 			image.Point{0, 0},
@@ -47,13 +40,13 @@ func CreateImage() *Image {
 
 	for j := 0; j < IMAGE_SIZE; j += IMG_LATTICE_RATIO {
 		for i := 0; i < IMAGE_SIZE; i += 1 {
-			img.Set(j, i, gray)
+			img.Set(j, i, GRAY)
 		}
 	}
 
 	for j := 0; j < IMAGE_SIZE; j += 1 {
 		for i := 0; i < IMAGE_SIZE; i += IMG_LATTICE_RATIO {
-			img.Set(j, i, gray)
+			img.Set(j, i, GRAY)
 		}
 	}
 
@@ -155,6 +148,7 @@ func (i *Image) Arrow(yLattice, xLattice float64, lineColor color.Color) {
 	dx := xStart - xEnd
 	angle := math.Atan2(float64(dy), float64(dx))
 
+	//Create 2 lines, +-45 degrees of the original line created
 	angle1 := angle + math.Pi/4
 	if angle1 > 2*math.Pi {
 		angle1 -= 2 * math.Pi
@@ -175,12 +169,6 @@ func (i *Image) Arrow(yLattice, xLattice float64, lineColor color.Color) {
 
 func (i *Image) Point(yLattice, xLattice float64) {
 	var pointColor = color.Black
-	//var pointColor = color.RGBA{255, 0, 255, 255}
-
-	/*	if yLattice < i.sizeMinY || yLattice > i.sizeMaxY ||
-		xLattice < i.sizeMinX || xLattice > i.sizeMaxX {
-		return
-	}*/
 
 	yPixel := i.originY - int(yLattice*IMG_LATTICE_RATIO)
 	xPixel := i.originX + int(xLattice*IMG_LATTICE_RATIO)
